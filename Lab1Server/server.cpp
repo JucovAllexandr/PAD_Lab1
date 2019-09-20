@@ -4,6 +4,36 @@
 
 Server::Server()
 {
+    db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName(QDir::currentPath()+"/db.sqlite3");
+
+    if (!db.open()) {
+        qDebug() << db.lastError().text();
+    }
+
+    QSqlQuery query;
+    if(query.exec("SELECT name FROM sqlite_master WHERE type = \"table\"")){
+        QStringList tbl_name;
+        while(query.next()){
+            qDebug()<<"tables "<<query.value(0);
+            tbl_name.push_back(query.value(0).toString());
+        }
+        if(tbl_name.isEmpty()){
+            QStringList sql = CREATE_TABLES_SQL.split(';');
+            for(int i =0; i < sql.size(); i++){
+                if(!query.exec(sql.at(i))){
+                    qDebug() << query.lastError().text();
+                }
+            }
+        }else if (!(tbl_name.contains("Topics", Qt::CaseInsensitive) && tbl_name.contains("Messages", Qt::CaseInsensitive))){
+
+        }
+
+    }else{
+        qDebug() << query.lastError().text();
+        qDebug() << db.lastError().text();
+    }
+
     socket = ::socket(AF_INET, SOCK_STREAM, 0);
     if(socket < 0){
         qDebug()<<"Error create socket "<<::explain_errno_socket(errno, AF_INET, SOCK_STREAM, 0);

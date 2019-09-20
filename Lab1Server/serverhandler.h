@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include <QThread>
 #include "socketio.h"
+#include <unistd.h>
 
 class ServerHandler: public QThread
 {

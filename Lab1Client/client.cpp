@@ -24,3 +24,8 @@ void Client::connect(QString ip, int port)
         io.send(socket, buf.data(), buf.size());
     }
 }
+
+Client::~Client()
+{
+    ::close(socket);
+}

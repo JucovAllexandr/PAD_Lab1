@@ -29,7 +29,14 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_ip"/>
+        <widget class="QLineEdit" name="lineEdit_ip">
+         <property name="text">
+          <string>127.0.0.1</string>
+         </property>
+         <property name="maxLength">
+          <number>15</number>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QLabel" name="label_port">
@@ -45,6 +52,9 @@
          </property>
          <property name="maximum">
           <number>65535</number>
+         </property>
+         <property name="value">
+          <number>59050</number>
          </property>
         </widget>
        </item>

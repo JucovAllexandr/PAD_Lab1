@@ -7,6 +7,7 @@
 #include<arpa/inet.h>
 #include <QString>
 #include "../Lab1Server/socketio.h"
+#include <unistd.h>
 
 class Client
 {
@@ -15,6 +16,7 @@ class Client
 public:
     Client();
     void connect(QString ip, int port);
+    ~Client();
 };
 
 #endif // CLIENT_H
