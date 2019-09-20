@@ -5,6 +5,7 @@
 #include <netinet/in.h>
 #include <libexplain/socket.h>
 #include <QThread>
+#include "serverhandler.h"
 
 class Server: public QThread
 {

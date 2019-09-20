@@ -19,11 +19,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     client.cpp \
     main.cpp \
-    widget.cpp
+    widget.cpp \
+    ../Lab1Server/socketio.cpp
 
 HEADERS += \
     client.h \
-    widget.h
+    widget.h \
+    ../Lab1Server/socketio.h
 
 FORMS += \
     widget.ui

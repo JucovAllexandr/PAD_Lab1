@@ -19,6 +19,8 @@ void Server::bind(int port)
     if(!::bind(socket, (sockaddr*)&address, sizeof(address))){
         if(::listen(socket, 1) < 0){
             qDebug()<<"Error listen socket "<<::explain_errno_socket(errno, AF_INET, SOCK_STREAM, 0);
+        }else{
+            qDebug()<<"Server started, port: "<<port;
         }
     }else{
         qDebug()<<"Error bind socket "<<::explain_errno_socket(errno, AF_INET, SOCK_STREAM, 0);
@@ -28,7 +30,11 @@ void Server::bind(int port)
 
 void Server::run()
 {
-    while(accept(socket, nullptr, nullptr) > 0){
+    while(1){
+        int sock = accept(socket, nullptr, nullptr);
+        if(sock < 0) break;
         qDebug()<<"Client connected";
+        ServerHandler *sh = new ServerHandler(sock);
+        sh->run();
     }
 }
