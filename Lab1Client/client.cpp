@@ -18,5 +18,9 @@ void Client::connect(QString ip, int port)
 
     if(::connect(socket, (sockaddr*)&address, sizeof (address)) < 0){
         qDebug()<<"Error connect socket "<<::explain_errno_socket(errno, AF_INET, SOCK_STREAM, 0);
+    }else {
+        SocketIO io;
+        QByteArray buf = "hello world";
+        io.send(socket, buf.data(), buf.size());
     }
 }
