@@ -20,7 +20,7 @@ void Client::connect(QString ip, int port)
         qDebug()<<"Error connect socket "<<::explain_errno_socket(errno, AF_INET, SOCK_STREAM, 0);
     }else {
         SocketIO io;
-        QByteArray buf = "hello world";
+        QByteArray buf = "sender connect\r\n";
         io.send(socket, buf.data(), buf.size());
     }
 }

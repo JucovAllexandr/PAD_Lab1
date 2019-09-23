@@ -18,15 +18,8 @@ Server::Server()
             qDebug()<<"tables "<<query.value(0);
             tbl_name.push_back(query.value(0).toString());
         }
-        if(tbl_name.isEmpty()){
-            QStringList sql = CREATE_TABLES_SQL.split(';');
-            for(int i =0; i < sql.size(); i++){
-                if(!query.exec(sql.at(i))){
-                    qDebug() << query.lastError().text();
-                }
-            }
-        }else if (!(tbl_name.contains("Topics", Qt::CaseInsensitive) && tbl_name.contains("Messages", Qt::CaseInsensitive))){
-
+        if(tbl_name.isEmpty() || !(tbl_name.contains("Topics", Qt::CaseInsensitive) && tbl_name.contains("Messages", Qt::CaseInsensitive))){
+           createTables();
         }
 
     }else{
@@ -66,5 +59,16 @@ void Server::run()
         qDebug()<<"Client connected";
         ServerHandler *sh = new ServerHandler(sock);
         sh->run();
+    }
+}
+
+void Server::createTables()
+{
+    QSqlQuery query;
+    QStringList sql = CREATE_TABLES_SQL.split(';');
+    for(int i =0; i < sql.size(); i++){
+        if(!query.exec(sql.at(i))){
+            qDebug() << query.lastError().text();
+        }
     }
 }

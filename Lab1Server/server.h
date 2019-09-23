@@ -32,6 +32,7 @@ public:
     Server();
     void bind(int port);
     void run() override;
+    void createTables();
 };
 
 #endif // SERVER_H

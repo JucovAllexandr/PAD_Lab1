@@ -9,11 +9,15 @@
 
 class ServerHandler: public QThread
 {
+    enum ClientType {None, Publisher, Subscriber};
     int socket;
     char buf[1024];
     int bytes_read;
     QByteArray array;
     SocketIO io;
+    ClientType clientType = None;
+    bool receiveJson = false;
+    int jsonBytes;
 
 public:
     ServerHandler(int socket);
