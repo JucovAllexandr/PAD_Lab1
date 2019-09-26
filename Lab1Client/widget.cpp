@@ -21,6 +21,10 @@ Widget::Widget(QWidget *parent)
         ui->label_satus->setText("Status: connected as subscriber");
         this->enableUIForSubscriber();
     });
+
+    connect(client, &Client::connectionError, this, [this]{
+        ui->label_satus->setText("Status: connection error");
+    });
 }
 
 Widget::~Widget()

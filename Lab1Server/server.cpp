@@ -31,6 +31,20 @@ Server::Server()
     if(socket < 0){
         qDebug()<<"Error create socket "<<::explain_errno_socket(errno, AF_INET, SOCK_STREAM, 0);
     }
+
+    if(query.exec("select * from Topics")){
+        while (query.next()) {
+            QStringList tags = query.value(1).toString().trimmed().split(',');
+
+            for(int i =0; i < tags.size(); ++i){
+                tags[i] = tags.at(i).trimmed();
+            }
+            topicTags.push_back(QPair<QString, QStringList>(query.value(0).toString(), tags));
+        }
+        qDebug()<<"Topic tags: "<<topicTags;
+    }else{
+        qDebug()<< "Error get topic tags" << query.lastError().text();
+    }
 }
 
 void Server::bind(int port)
@@ -57,7 +71,7 @@ void Server::run()
         int sock = accept(socket, nullptr, nullptr);
         if(sock < 0) break;
         qDebug()<<"Client connected";
-        ServerHandler *sh = new ServerHandler(sock);
+        ServerHandler *sh = new ServerHandler(sock, topicTags);
         sh->run();
     }
 }

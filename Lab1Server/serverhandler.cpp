@@ -1,6 +1,6 @@
 #include "serverhandler.h"
-#include <QDebug>
-ServerHandler::ServerHandler(int socket): socket(socket)
+
+ServerHandler::ServerHandler(int socket, QVector<QPair<QString, QStringList> > &topicTags): socket(socket), topicTags(topicTags)
 {
     array.reserve(1024);
 }
@@ -30,6 +30,26 @@ void ServerHandler::run()
                 jsonBytes -= bytes_read;
                 if(jsonBytes <= 0){
                     qDebug()<<"received json "<<array;
+                    msg.deserializeJson(array);
+
+                    /*add correction words*/
+                    QString message = msg.message();
+
+                    for(int i = 0; i < topicTags.size(); ++i){
+                        for(int j = 0; j < topicTags.size(); ++j){
+                            if(message.contains(topicTags.at(i).second.at(j), Qt::CaseInsensitive)){
+                                qDebug()<<"insert into "<< topicTags.at(i);
+                                query.prepare("insert into Messages (TopicName, Message) values (:TopicName, :Message)");
+                                query.bindValue(":TopicName", topicTags.at(i).first);
+                                query.bindValue(":Message", message);
+                                if(!query.exec()){
+                                    qDebug()<<"Error inserting message" << query.lastError().text();
+                                }
+                            }
+                        }
+                    }
+
+
                     receiveJson = false;
                     break;
                 }
@@ -44,7 +64,7 @@ void ServerHandler::run()
             break;
         }
 
-        qDebug() << "array";
+        qDebug() << "message "<<msg.message();
         QString str(array);
 
         if(clientType == None){

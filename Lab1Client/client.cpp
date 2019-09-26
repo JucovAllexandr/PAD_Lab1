@@ -1,5 +1,5 @@
 #include "client.h"
-
+#include "message.h"
 #include <QThread>
 void Client::send(QByteArray msg)
 {
@@ -38,12 +38,10 @@ void Client::connectAsPublisher(QString ip, int port)
         qDebug()<<"Check publisher connect " <<recvMsg;
 
         if(recvMsg.contains("+OK publisher\r\n")){
-
-
+            emit connectedAsPublisher();
         }else{
-
+            emit connectionError();
         }
-
     }
 }
 
@@ -59,14 +57,23 @@ void Client::connectAsSubscriber(QString ip, int port, QString topic)
         SocketIO io;
         QByteArray buf = "subscriber connect\r\n";
         io.send(socket, buf.data(), buf.size());
+        QByteArray recvMsg = io.recv(socket);
+
+        qDebug()<<"Check subscriber connect " <<recvMsg;
+
+        if(recvMsg.contains("+OK subscriber\r\n")){
+            emit connectedAsSubscriber();
+        }else{
+            emit connectionError();
+        }
     }
 }
 
 void Client::send(QString txt)
 {
-    QJsonObject obj;
-    obj["message"] = txt;
-    send(QJsonDocument(obj).toJson());
+    Message msg;
+    msg.setMessage(txt);
+    send(msg.serializeToJson());
 }
 
 Client::~Client()

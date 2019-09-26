@@ -28,6 +28,7 @@ public:
 signals:
     void connectedAsPublisher();
     void connectedAsSubscriber();
+    void connectionError();
 };
 
 #endif // CLIENT_H

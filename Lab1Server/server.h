@@ -8,6 +8,7 @@
 #include "serverhandler.h"
 #include <QtSql>
 
+
 const QString CREATE_TABLES_SQL = (QString)"BEGIN TRANSACTION;"+
     " CREATE TABLE IF NOT EXISTS `Topics` ( "+
     "	`TopicName`	TEXT NOT NULL, "+
@@ -28,6 +29,8 @@ class Server: public QThread
     QSqlDatabase db;
     int socket;
     sockaddr_in address;
+    QVector<QPair<QString, QStringList> > topicTags;
+
 public:
     Server();
     void bind(int port);

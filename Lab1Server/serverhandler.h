@@ -6,6 +6,11 @@
 #include <QThread>
 #include "socketio.h"
 #include <unistd.h>
+#include "../PAD_Lab1/Lab1Client/message.h"
+#include <QSqlQuery>
+#include <QMultiHash>
+#include <QDebug>
+#include <QSqlError>
 
 class ServerHandler: public QThread
 {
@@ -18,9 +23,12 @@ class ServerHandler: public QThread
     ClientType clientType = None;
     bool receiveJson = false;
     int jsonBytes;
+    Message msg;
+    QVector<QPair<QString, QStringList> >  topicTags;
+    QSqlQuery query;
 
 public:
-    ServerHandler(int socket);
+    ServerHandler(int socket, QVector<QPair<QString, QStringList> >  &topicTags);
     void run() override;
 };
 
