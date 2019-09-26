@@ -8,15 +8,26 @@
 #include <QString>
 #include "../Lab1Server/socketio.h"
 #include <unistd.h>
+#include <QDebug>
+#include <QJsonObject>
+#include <QJsonDocument>
 
-class Client
+class Client: public QObject
 {
+    Q_OBJECT
+
     int socket;
     sockaddr_in address;
+    void send(QByteArray msg);
 public:
-    Client();
-    void connect(QString ip, int port);
+    Client(QObject *parent = nullptr);
+    void connectAsPublisher(QString ip, int port);
+    void connectAsSubscriber(QString ip, int port, QString topic);
+    void send(QString txt);
     ~Client();
+signals:
+    void connectedAsPublisher();
+    void connectedAsSubscriber();
 };
 
 #endif // CLIENT_H

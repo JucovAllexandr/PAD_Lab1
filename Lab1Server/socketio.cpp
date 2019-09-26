@@ -18,12 +18,12 @@ bool SocketIO::send(int socket, char *buf, int len)
 
 QByteArray SocketIO::recv(int socket)
 {
-    int bytes_read = 0;
+    long bytes_read = 0;
     QByteArray ret_buf;
     char buf[1024] = {0};
 
     while(bytes_read <= 0){
-        ::recv(socket, buf, 1024, 0);
+        bytes_read = ::recv(socket, buf, 1024, 0);
         ret_buf.push_back(buf);
     }
 

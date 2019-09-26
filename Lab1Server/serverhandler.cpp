@@ -9,6 +9,7 @@ void ServerHandler::run()
 {
     bool isStop = false;
     while(1){
+        memset(buf, 0, 1024);
         while(1){
             // array.push_back(io.recv(socket));
             bytes_read = recv(socket, buf, 1024, 0);
@@ -28,13 +29,15 @@ void ServerHandler::run()
             if(receiveJson){
                 jsonBytes -= bytes_read;
                 if(jsonBytes <= 0){
+                    qDebug()<<"received json "<<array;
+                    receiveJson = false;
                     break;
                 }
             }
             else if(array.endsWith("\r\n")){
                 break;
             }
-            qDebug() << array;
+            //qDebug() << array;
         }
 
         if(isStop){
@@ -45,16 +48,25 @@ void ServerHandler::run()
         QString str(array);
 
         if(clientType == None){
+            QByteArray buf;
             if(str.contains("publisher connect\r\n")){
                 clientType = Publisher;
+                buf.push_back("+OK publisher\r\n");
+                qDebug()<<"Client "<<socket<<" connect as publisher";
             }else if(str.contains("subscriber connect\r\n")){
                 clientType = Subscriber;
+                buf.push_back("+OK subscriber\r\n");
+                qDebug()<<"Client "<<socket<<" connect as subscriber";
+            }else{
+                buf.push_back("+NO\r\n");
             }
+            io.send(socket, buf.data(), buf.size());
         }
 
         if(clientType != None){
             if(clientType == Publisher){
                 if(str.contains("send json ")){
+                    qDebug() << str;
                     jsonBytes = str.split(' ').at(2).toInt();
                     receiveJson = true;
                 }

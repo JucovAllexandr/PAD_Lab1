@@ -20,12 +20,14 @@ SOURCES += \
     client.cpp \
     main.cpp \
     widget.cpp \
-    ../Lab1Server/socketio.cpp
+    ../Lab1Server/socketio.cpp \
+    message.cpp
 
 HEADERS += \
     client.h \
     widget.h \
-    ../Lab1Server/socketio.h
+    ../Lab1Server/socketio.h \
+    message.h
 
 FORMS += \
     widget.ui
