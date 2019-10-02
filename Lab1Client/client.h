@@ -17,17 +17,21 @@ class Client: public QObject
     Q_OBJECT
 
     int socket;
+    bool isConnected = false;
     sockaddr_in address;
     void send(QByteArray msg);
 public:
     Client(QObject *parent = nullptr);
-    void connectAsPublisher(QString ip, int port);
-    void connectAsSubscriber(QString ip, int port, QString topic);
+    void connect(QString ip, int port);
+    QStringList getTopics();
+    void becomeAPublisher();
+    void becomeASubscriber(QString topic);
     void send(QString txt);
     ~Client();
 signals:
-    void connectedAsPublisher();
-    void connectedAsSubscriber();
+    void becameAPublisher();
+    void becameASubscriber();
+    void connected();
     void connectionError();
 };
 

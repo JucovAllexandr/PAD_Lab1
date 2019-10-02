@@ -49,7 +49,6 @@ void ServerHandler::run()
                         }
                     }
 
-
                     receiveJson = false;
                     break;
                 }
@@ -64,10 +63,26 @@ void ServerHandler::run()
             break;
         }
 
-        qDebug() << "message "<<msg.message();
+
         QString str(array);
 
-        if(clientType == None){
+        if(str.contains("get topics\r\n")){
+            QByteArray buf;
+            for(int i = 0; i < topicTags.size(); ++i){
+                buf.push_back(topicTags.at(i).first.toStdString().c_str());
+                buf.push_back("\n");
+            }
+
+            SocketIO io;
+            io.send(socket, buf.data(), buf.length());
+
+            QThread::msleep(100);
+
+            buf.clear();
+            buf.push_back("+OK\r\n");
+            io.send(socket, buf.data(), buf.length());
+        }
+        else if(clientType == None){
             QByteArray buf;
             if(str.contains("publisher connect\r\n")){
                 clientType = Publisher;

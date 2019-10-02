@@ -6,7 +6,7 @@
 #include <QThread>
 #include "socketio.h"
 #include <unistd.h>
-#include "../PAD_Lab1/Lab1Client/message.h"
+#include "../Lab1Client/message.h"
 #include <QSqlQuery>
 #include <QMultiHash>
 #include <QDebug>

@@ -69,16 +69,23 @@
         <widget class="QComboBox" name="comboBox_topics"/>
        </item>
        <item>
+        <widget class="QPushButton" name="pushButton_connect">
+         <property name="text">
+          <string>Connect</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="pushButton_connectPb">
          <property name="text">
-          <string>Connect as publisher</string>
+          <string>Become a publisher</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="pushButton_connectSb">
          <property name="text">
-          <string>Connect as subscriber</string>
+          <string>Become a subscriber</string>
          </property>
         </widget>
        </item>

@@ -27,7 +27,7 @@ class Server: public QThread
 {
     Q_OBJECT
     QSqlDatabase db;
-    int socket;
+    int tcpSocket;
     sockaddr_in address;
     QVector<QPair<QString, QStringList> > topicTags;
 

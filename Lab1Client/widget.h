@@ -23,8 +23,11 @@ private slots:
 
     void on_pushButton_send_clicked();
 
+    void on_pushButton_connect_clicked();
+
 private:
     Ui::Widget *ui;
+    void enableButtons();
     void disableAllUI();
     void enableUIForPublisher();
     void enableUIForSubscriber();
