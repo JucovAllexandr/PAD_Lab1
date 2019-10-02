@@ -19,12 +19,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     client.cpp \
     main.cpp \
+    subscriberhandler.cpp \
     widget.cpp \
     ../Lab1Server/socketio.cpp \
     message.cpp
 
 HEADERS += \
     client.h \
+    subscriberhandler.h \
     widget.h \
     ../Lab1Server/socketio.h \
     message.h

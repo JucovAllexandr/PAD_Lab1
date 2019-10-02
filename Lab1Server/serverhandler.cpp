@@ -28,6 +28,7 @@ void ServerHandler::run()
 
             if(receiveJson){
                 jsonBytes -= bytes_read;
+
                 if(jsonBytes <= 0){
                     qDebug()<<"received json "<<array;
                     msg.deserializeJson(array);
@@ -42,7 +43,19 @@ void ServerHandler::run()
                                 query.prepare("insert into Messages (TopicName, Message) values (:TopicName, :Message)");
                                 query.bindValue(":TopicName", topicTags.at(i).first);
                                 query.bindValue(":Message", message);
-                                if(!query.exec()){
+
+                                if(query.exec()){
+                                    for(int i = 0; i < topicSubscribers.size(); ++i){
+                                        QByteArray msg = message.toStdString().c_str();
+                                        QByteArray buf = "send xml ";
+                                        buf.push_back(QString::number(msg.size()).toStdString().c_str());
+                                        buf.push_back(" \r\n");
+                                        io.send(socket, buf.data(), buf.size());
+
+                                        QThread::msleep(100);
+                                        io.send(socket, msg.data(), msg.size());
+                                    }
+                                }else{
                                     qDebug()<<"Error inserting message" << query.lastError().text();
                                 }
                             }
@@ -88,10 +101,33 @@ void ServerHandler::run()
                 clientType = Publisher;
                 buf.push_back("+OK publisher\r\n");
                 qDebug()<<"Client "<<socket<<" connect as publisher";
-            }else if(str.contains("subscriber connect\r\n")){
-                clientType = Subscriber;
-                buf.push_back("+OK subscriber\r\n");
-                qDebug()<<"Client "<<socket<<" connect as subscriber";
+            }else if(str.contains("subscriber connect")){
+                QString topic = str.split(' ').at(2).trimmed();
+                bool isExist = false;
+                if(!topic.isEmpty()){
+                    query.prepare("select TopicName from Topics where TopicName = :topic");
+                    query.bindValue(":topic", topic);
+
+                    if(query.exec()){
+                        while (query.next()) {
+                            if(query.value(0).toString().contains(topic, Qt::CaseInsensitive)){
+                                isExist = true;
+                                topicSubscribers.push_back(QPair<QString, int> (topic, socket));
+                            }
+                        }
+                    }else{
+                        qDebug()<<"Error inserting message" << query.lastError().text();
+                    }
+                }
+
+                if(isExist){
+                    clientType = Subscriber;
+                    buf.push_back("+OK subscriber\r\n");
+                    qDebug()<<"Client "<<socket<<" connect as subscriber on "+topic;
+                }else{
+                    buf.push_back("+NO\r\n");
+                }
+
             }else{
                 buf.push_back("+NO\r\n");
             }

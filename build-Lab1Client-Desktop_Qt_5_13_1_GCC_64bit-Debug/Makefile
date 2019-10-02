@@ -54,12 +54,14 @@ OBJECTS_DIR   = ./
 
 SOURCES       = ../Lab1Client/client.cpp \
 		../Lab1Client/main.cpp \
+		../Lab1Client/subscriberhandler.cpp \
 		../Lab1Client/widget.cpp \
 		../Lab1Server/socketio.cpp \
 		../Lab1Client/message.cpp moc_client.cpp \
 		moc_widget.cpp
 OBJECTS       = client.o \
 		main.o \
+		subscriberhandler.o \
 		widget.o \
 		socketio.o \
 		message.o \
@@ -241,6 +243,7 @@ DIST          = /opt/Qt/5.13.1/gcc_64/mkspecs/features/spec_pre.prf \
 		/opt/Qt/5.13.1/gcc_64/mkspecs/features/qt_config.prf \
 		/opt/Qt/5.13.1/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/opt/Qt/5.13.1/gcc_64/mkspecs/features/spec_post.prf \
+		../Lab1Client/.qmake.stash \
 		/opt/Qt/5.13.1/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/opt/Qt/5.13.1/gcc_64/mkspecs/features/toolchain.prf \
 		/opt/Qt/5.13.1/gcc_64/mkspecs/features/default_pre.prf \
@@ -261,10 +264,12 @@ DIST          = /opt/Qt/5.13.1/gcc_64/mkspecs/features/spec_pre.prf \
 		/opt/Qt/5.13.1/gcc_64/mkspecs/features/yacc.prf \
 		/opt/Qt/5.13.1/gcc_64/mkspecs/features/lex.prf \
 		../Lab1Client/Lab1Client.pro ../Lab1Client/client.h \
+		../Lab1Client/subscriberhandler.h \
 		../Lab1Client/widget.h \
 		../Lab1Server/socketio.h \
 		../Lab1Client/message.h ../Lab1Client/client.cpp \
 		../Lab1Client/main.cpp \
+		../Lab1Client/subscriberhandler.cpp \
 		../Lab1Client/widget.cpp \
 		../Lab1Server/socketio.cpp \
 		../Lab1Client/message.cpp
@@ -455,6 +460,7 @@ Makefile: ../Lab1Client/Lab1Client.pro /opt/Qt/5.13.1/gcc_64/mkspecs/linux-g++/q
 		/opt/Qt/5.13.1/gcc_64/mkspecs/features/qt_config.prf \
 		/opt/Qt/5.13.1/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/opt/Qt/5.13.1/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/opt/Qt/5.13.1/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/opt/Qt/5.13.1/gcc_64/mkspecs/features/toolchain.prf \
 		/opt/Qt/5.13.1/gcc_64/mkspecs/features/default_pre.prf \
@@ -652,6 +658,7 @@ Makefile: ../Lab1Client/Lab1Client.pro /opt/Qt/5.13.1/gcc_64/mkspecs/linux-g++/q
 /opt/Qt/5.13.1/gcc_64/mkspecs/features/qt_config.prf:
 /opt/Qt/5.13.1/gcc_64/mkspecs/linux-g++/qmake.conf:
 /opt/Qt/5.13.1/gcc_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /opt/Qt/5.13.1/gcc_64/mkspecs/features/exclusive_builds.prf:
 /opt/Qt/5.13.1/gcc_64/mkspecs/features/toolchain.prf:
 /opt/Qt/5.13.1/gcc_64/mkspecs/features/default_pre.prf:
@@ -687,8 +694,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /opt/Qt/5.13.1/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../Lab1Client/client.h ../Lab1Client/widget.h ../Lab1Server/socketio.h ../Lab1Client/message.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../Lab1Client/client.cpp ../Lab1Client/main.cpp ../Lab1Client/widget.cpp ../Lab1Server/socketio.cpp ../Lab1Client/message.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Lab1Client/client.h ../Lab1Client/subscriberhandler.h ../Lab1Client/widget.h ../Lab1Server/socketio.h ../Lab1Client/message.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Lab1Client/client.cpp ../Lab1Client/main.cpp ../Lab1Client/subscriberhandler.cpp ../Lab1Client/widget.cpp ../Lab1Server/socketio.cpp ../Lab1Client/message.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../Lab1Client/widget.ui $(DISTDIR)/
 
 
@@ -1141,6 +1148,64 @@ main.o: ../Lab1Client/main.cpp ../Lab1Client/widget.h \
 		/opt/Qt/5.13.1/gcc_64/include/QtGui/qinputmethod.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Lab1Client/main.cpp
 
+subscriberhandler.o: ../Lab1Client/subscriberhandler.cpp ../Lab1Client/subscriberhandler.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/QThread \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qthread.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qobject.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qobjectdefs.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qnamespace.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qglobal.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qconfig.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qtcore-config.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qsystemdetection.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qprocessordetection.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qcompilerdetection.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qtypeinfo.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qsysinfo.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qlogging.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qflags.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qatomic.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qbasicatomic.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qgenericatomic.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qatomic_msvc.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qglobalstatic.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qmutex.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qnumeric.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qversiontagging.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qstring.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qchar.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qbytearray.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qrefcount.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qarraydata.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qstringliteral.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qstringalgorithms.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qstringview.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qstringbuilder.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qlist.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qalgorithms.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qiterator.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qhashfunctions.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qpair.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qvector.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qpoint.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qbytearraylist.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qstringlist.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qregexp.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qstringmatcher.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qcoreevent.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qscopedpointer.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qmetatype.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qvarlengtharray.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qcontainerfwd.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qobject_impl.h \
+		../Lab1Server/socketio.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/QByteArray
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o subscriberhandler.o ../Lab1Client/subscriberhandler.cpp
+
 widget.o: ../Lab1Client/widget.cpp ../Lab1Client/widget.h \
 		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/QWidget \
 		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/qwidget.h \
@@ -1255,7 +1320,63 @@ widget.o: ../Lab1Client/widget.cpp ../Lab1Client/widget.h \
 		/opt/Qt/5.13.1/gcc_64/include/QtCore/qjsonvalue.h \
 		/opt/Qt/5.13.1/gcc_64/include/QtCore/QJsonDocument \
 		/opt/Qt/5.13.1/gcc_64/include/QtCore/qjsondocument.h \
-		ui_widget.h
+		ui_widget.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/QVariant \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/QApplication \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/qapplication.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qcoreapplication.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qeventloop.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtGui/qguiapplication.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtGui/qinputmethod.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/QComboBox \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/qcombobox.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/qstyleoption.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/qabstractspinbox.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtGui/qvalidator.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qregularexpression.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtGui/qicon.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/qslider.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/qabstractslider.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/qstyle.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/qtabbar.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/qtabwidget.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/qrubberband.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/qframe.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qabstractitemmodel.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/QHBoxLayout \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/qboxlayout.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/qlayout.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/qlayoutitem.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/qgridlayout.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/QLabel \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/qlabel.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/QLineEdit \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/qlineedit.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtGui/qtextcursor.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtGui/qtextformat.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtGui/qpen.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtGui/qtextoption.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/QPlainTextEdit \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/qplaintextedit.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/qtextedit.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtGui/qtextdocument.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtGui/qabstracttextdocumentlayout.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtGui/qtextlayout.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtGui/qglyphrun.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtGui/qrawfont.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtGui/qfontdatabase.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/QPushButton \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/qpushbutton.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/qabstractbutton.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/QSpacerItem \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/QSpinBox \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/qspinbox.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/QTextBrowser \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/qtextbrowser.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/QVBoxLayout
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o widget.o ../Lab1Client/widget.cpp
 
 socketio.o: ../Lab1Server/socketio.cpp ../Lab1Server/socketio.h \

@@ -40,12 +40,12 @@ Widget::~Widget()
 
 void Widget::on_pushButton_connectPb_clicked()
 {
-    //   client->connectAsPublisher(ui->lineEdit_ip->text(), ui->spinBox_port->value());
+    client->becomeAPublisher();
 }
 
 void Widget::on_pushButton_connectSb_clicked()
 {
-    //    client->connectAsSubscriber(ui->lineEdit_ip->text(), ui->spinBox_port->value(), ui->comboBox_topics->currentText());
+    client->becomeASubscriber(ui->comboBox_topics->currentText());
 }
 
 void Widget::on_pushButton_connect_clicked()

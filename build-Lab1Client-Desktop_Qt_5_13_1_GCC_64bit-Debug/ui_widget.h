@@ -37,6 +37,7 @@ public:
     QSpinBox *spinBox_port;
     QLabel *label;
     QComboBox *comboBox_topics;
+    QPushButton *pushButton_connect;
     QPushButton *pushButton_connectPb;
     QPushButton *pushButton_connectSb;
     QHBoxLayout *horizontalLayout_2;
@@ -92,6 +93,11 @@ public:
         comboBox_topics->setObjectName(QString::fromUtf8("comboBox_topics"));
 
         horizontalLayout->addWidget(comboBox_topics);
+
+        pushButton_connect = new QPushButton(Widget);
+        pushButton_connect->setObjectName(QString::fromUtf8("pushButton_connect"));
+
+        horizontalLayout->addWidget(pushButton_connect);
 
         pushButton_connectPb = new QPushButton(Widget);
         pushButton_connectPb->setObjectName(QString::fromUtf8("pushButton_connectPb"));
@@ -156,8 +162,9 @@ public:
         lineEdit_ip->setText(QCoreApplication::translate("Widget", "127.0.0.1", nullptr));
         label_port->setText(QCoreApplication::translate("Widget", "Port", nullptr));
         label->setText(QCoreApplication::translate("Widget", "Topics", nullptr));
-        pushButton_connectPb->setText(QCoreApplication::translate("Widget", "Connect as publisher", nullptr));
-        pushButton_connectSb->setText(QCoreApplication::translate("Widget", "Connect as subscriber", nullptr));
+        pushButton_connect->setText(QCoreApplication::translate("Widget", "Connect", nullptr));
+        pushButton_connectPb->setText(QCoreApplication::translate("Widget", "Become a publisher", nullptr));
+        pushButton_connectSb->setText(QCoreApplication::translate("Widget", "Become a subscriber", nullptr));
         pushButton_send->setText(QCoreApplication::translate("Widget", "Send", nullptr));
         label_satus->setText(QString());
     } // retranslateUi

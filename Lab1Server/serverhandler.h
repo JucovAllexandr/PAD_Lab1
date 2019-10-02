@@ -25,6 +25,7 @@ class ServerHandler: public QThread
     int jsonBytes;
     Message msg;
     QVector<QPair<QString, QStringList> >  topicTags;
+    QVector<QPair<QString, int>> topicSubscribers;
     QSqlQuery query;
 
 public:
