@@ -17,6 +17,7 @@ Client::Client(QObject *parent): QObject (parent)
 {
     socket = ::socket(AF_INET, SOCK_STREAM, 0);
 
+
     if(socket < 0){
         qDebug()<<"Error create socket "<<::explain_errno_socket(errno, AF_INET, SOCK_STREAM, 0);
     }
@@ -91,6 +92,8 @@ void Client::becomeASubscriber(QString topic)
 
         if(recvMsg.contains("+OK subscriber\r\n")){
             emit becameASubscriber();
+            subHandler = new SubscriberHandler(socket, this);
+            subHandler->start();
         }else{
             isConnected = false;
             emit connectionError();

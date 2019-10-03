@@ -804,6 +804,9 @@ moc_client.cpp: ../Lab1Client/client.h \
 		/opt/Qt/5.13.1/gcc_64/include/QtCore/qjsonvalue.h \
 		/opt/Qt/5.13.1/gcc_64/include/QtCore/QJsonDocument \
 		/opt/Qt/5.13.1/gcc_64/include/QtCore/qjsondocument.h \
+		../Lab1Client/subscriberhandler.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/QThread \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qthread.h \
 		moc_predefs.h \
 		/opt/Qt/5.13.1/gcc_64/bin/moc
 	/opt/Qt/5.13.1/gcc_64/bin/moc $(DEFINES) --include /home/sania/PAD_Lab1/build-Lab1Client-Desktop_Qt_5_13_1_GCC_64bit-Debug/moc_predefs.h -I/opt/Qt/5.13.1/gcc_64/mkspecs/linux-g++ -I/home/sania/PAD_Lab1/Lab1Client -I/opt/Qt/5.13.1/gcc_64/include -I/opt/Qt/5.13.1/gcc_64/include/QtWidgets -I/opt/Qt/5.13.1/gcc_64/include/QtGui -I/opt/Qt/5.13.1/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../Lab1Client/client.h -o moc_client.cpp
@@ -922,6 +925,9 @@ moc_widget.cpp: ../Lab1Client/widget.h \
 		/opt/Qt/5.13.1/gcc_64/include/QtCore/qjsonvalue.h \
 		/opt/Qt/5.13.1/gcc_64/include/QtCore/QJsonDocument \
 		/opt/Qt/5.13.1/gcc_64/include/QtCore/qjsondocument.h \
+		../Lab1Client/subscriberhandler.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/QThread \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qthread.h \
 		moc_predefs.h \
 		/opt/Qt/5.13.1/gcc_64/bin/moc
 	/opt/Qt/5.13.1/gcc_64/bin/moc $(DEFINES) --include /home/sania/PAD_Lab1/build-Lab1Client-Desktop_Qt_5_13_1_GCC_64bit-Debug/moc_predefs.h -I/opt/Qt/5.13.1/gcc_64/mkspecs/linux-g++ -I/home/sania/PAD_Lab1/Lab1Client -I/opt/Qt/5.13.1/gcc_64/include -I/opt/Qt/5.13.1/gcc_64/include/QtWidgets -I/opt/Qt/5.13.1/gcc_64/include/QtGui -I/opt/Qt/5.13.1/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../Lab1Client/widget.h -o moc_widget.cpp
@@ -1020,9 +1026,10 @@ client.o: ../Lab1Client/client.cpp ../Lab1Client/client.h \
 		/opt/Qt/5.13.1/gcc_64/include/QtCore/qjsonvalue.h \
 		/opt/Qt/5.13.1/gcc_64/include/QtCore/QJsonDocument \
 		/opt/Qt/5.13.1/gcc_64/include/QtCore/qjsondocument.h \
-		../Lab1Client/message.h \
+		../Lab1Client/subscriberhandler.h \
 		/opt/Qt/5.13.1/gcc_64/include/QtCore/QThread \
-		/opt/Qt/5.13.1/gcc_64/include/QtCore/qthread.h
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qthread.h \
+		../Lab1Client/message.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o client.o ../Lab1Client/client.cpp
 
 main.o: ../Lab1Client/main.cpp ../Lab1Client/widget.h \
@@ -1139,6 +1146,9 @@ main.o: ../Lab1Client/main.cpp ../Lab1Client/widget.h \
 		/opt/Qt/5.13.1/gcc_64/include/QtCore/qjsonvalue.h \
 		/opt/Qt/5.13.1/gcc_64/include/QtCore/QJsonDocument \
 		/opt/Qt/5.13.1/gcc_64/include/QtCore/qjsondocument.h \
+		../Lab1Client/subscriberhandler.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/QThread \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qthread.h \
 		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/QApplication \
 		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/qapplication.h \
 		/opt/Qt/5.13.1/gcc_64/include/QtCore/qcoreapplication.h \
@@ -1203,7 +1213,20 @@ subscriberhandler.o: ../Lab1Client/subscriberhandler.cpp ../Lab1Client/subscribe
 		/opt/Qt/5.13.1/gcc_64/include/QtCore/qcontainerfwd.h \
 		/opt/Qt/5.13.1/gcc_64/include/QtCore/qobject_impl.h \
 		../Lab1Server/socketio.h \
-		/opt/Qt/5.13.1/gcc_64/include/QtCore/QByteArray
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/QByteArray \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/QDebug \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qdebug.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qhash.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qmap.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qtextstream.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qiodevice.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qlocale.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qvariant.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qshareddata.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qset.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qcontiguouscache.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qsharedpointer.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qsharedpointer_impl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o subscriberhandler.o ../Lab1Client/subscriberhandler.cpp
 
 widget.o: ../Lab1Client/widget.cpp ../Lab1Client/widget.h \
@@ -1320,6 +1343,9 @@ widget.o: ../Lab1Client/widget.cpp ../Lab1Client/widget.h \
 		/opt/Qt/5.13.1/gcc_64/include/QtCore/qjsonvalue.h \
 		/opt/Qt/5.13.1/gcc_64/include/QtCore/QJsonDocument \
 		/opt/Qt/5.13.1/gcc_64/include/QtCore/qjsondocument.h \
+		../Lab1Client/subscriberhandler.h \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/QThread \
+		/opt/Qt/5.13.1/gcc_64/include/QtCore/qthread.h \
 		ui_widget.h \
 		/opt/Qt/5.13.1/gcc_64/include/QtCore/QVariant \
 		/opt/Qt/5.13.1/gcc_64/include/QtWidgets/QApplication \

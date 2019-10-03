@@ -10,6 +10,8 @@ void ServerHandler::run()
 {
     bool isStop = false;
     while(1){
+        //qDebug()<<"array: " << array;
+        array.clear();
         memset(buf, 0, 1024);
         while(1){
             // array.push_back(io.recv(socket));
@@ -20,6 +22,12 @@ void ServerHandler::run()
                 isStop = true;
                 break;
             }else if(bytes_read == 0){
+                for(int i = 0; i < topicSubscribers->size(); ++i){
+                    if(topicSubscribers->at(i).second == socket){
+                        topicSubscribers->remove(i);
+                        break;
+                    }
+                }
                 qDebug()<<"Client "<<socket<<" disconected";
                 isStop = true;
                 break;
@@ -36,9 +44,15 @@ void ServerHandler::run()
 
                     /*add correction words*/
                     QString message = msg.message();
+                    bool isInserted = false;
 
                     for(int i = 0; i < topicTags.size(); ++i){
+                        if(isInserted){
+                            break;
+                        }
+
                         for(int j = 0; j < topicTags.at(i).second.size(); ++j){
+
                             if(message.contains(topicTags.at(i).second.at(j), Qt::CaseInsensitive)){
                                 qDebug()<<"insert into "<< topicTags.at(i);
                                 query.prepare("insert into Messages (TopicName, Message) values (:TopicName, :Message)");
@@ -46,17 +60,38 @@ void ServerHandler::run()
                                 query.bindValue(":Message", message);
 
                                 if(query.exec()){
-                                    qDebug() <<"subscribers: "<< topicSubscribers;
+
                                     for(int t = 0; t < topicSubscribers->size(); ++t){
-                                        QByteArray msg = message.toStdString().c_str();
+                                        qDebug() <<"subscribers: "<< topicSubscribers->at(t).first << topicSubscribers->at(t).second;
+                                    }
+                                    isInserted = true;
+
+                                    QDomDocument doc("XML");
+                                    QDomElement root = doc.createElement("XML");
+                                    doc.appendChild(root);
+
+                                    QDomElement tag = doc.createElement("Message");
+                                    root.appendChild(tag);
+
+                                    QDomText t = doc.createTextNode(message);
+                                    tag.appendChild(t);
+
+                                    QString xml = doc.toString();
+
+                                    qDebug()<<xml;
+
+                                    for(int t = 0; t < topicSubscribers->size(); ++t){
+                                        QByteArray msg = xml.toStdString().c_str();
                                         QByteArray buf = "send xml ";
                                         buf.push_back(QString::number(msg.size()).toStdString().c_str());
                                         buf.push_back(" \r\n");
-                                        io.send(socket, buf.data(), buf.size());
-                                        qDebug() <<"send xml: "<< buf;
+                                        io.send(topicSubscribers->at(t).second, buf.data(), buf.size());
                                         QThread::msleep(100);
-                                        io.send(socket, msg.data(), msg.size());
+                                        io.send(topicSubscribers->at(t).second, msg.data(), msg.size());
                                     }
+
+                                    break;
+
                                 }else{
                                     qDebug()<<"Error inserting message" << query.lastError().text();
                                 }
@@ -153,7 +188,7 @@ void ServerHandler::run()
             }
         }
 
-        array.clear();
+
     }
     ::close(socket);
 }

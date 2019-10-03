@@ -13,7 +13,7 @@ bool SocketIO::send(int socket, char *buf, int len)
         total += n;
     }
 
-    return (n==-1 ? -1 : total);
+    return (n==-1 ? 0 : total);
 }
 
 QByteArray SocketIO::recv(int socket)

@@ -11,6 +11,7 @@
 #include <QDebug>
 #include <QJsonObject>
 #include <QJsonDocument>
+#include "subscriberhandler.h"
 
 class Client: public QObject
 {
@@ -19,6 +20,7 @@ class Client: public QObject
     int socket;
     bool isConnected = false;
     sockaddr_in address;
+    SubscriberHandler *subHandler;
     void send(QByteArray msg);
 public:
     Client(QObject *parent = nullptr);

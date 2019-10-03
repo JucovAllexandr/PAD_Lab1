@@ -1,5 +1,5 @@
 QT -= gui
-QT += sql
+QT += sql xml
 CONFIG += c++11 console
 CONFIG -= app_bundle
 LIBS += -lexplain

@@ -7,8 +7,11 @@
 class SubscriberHandler: public QThread
 {
     int socket;
-    bool isConnected;
-    unsigned int recvByte = 0;
+    char buf[1024];
+    ssize_t bytes_read;
+    QByteArray array;
+    bool receiveXml = false;
+    unsigned int xmlRecvBytes;
     SocketIO io;
 public:
     SubscriberHandler(int socket, QObject *parent = nullptr);

@@ -12,12 +12,16 @@
 #include <QDebug>
 #include <QSqlError>
 
+#include <QDomDocument>
+#include <QDomElement>
+#include <QDomNode>
+
 class ServerHandler: public QThread
 {
     enum ClientType {None, Publisher, Subscriber};
     int socket;
     char buf[1024];
-    int bytes_read;
+    ssize_t bytes_read;
     QByteArray array;
     SocketIO io;
     ClientType clientType = None;
