@@ -8,6 +8,7 @@ class SubscriberHandler: public QThread
 {
     int socket;
     bool isConnected;
+    unsigned int recvByte = 0;
     SocketIO io;
 public:
     SubscriberHandler(int socket, QObject *parent = nullptr);

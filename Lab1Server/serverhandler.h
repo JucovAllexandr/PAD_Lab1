@@ -25,11 +25,11 @@ class ServerHandler: public QThread
     int jsonBytes;
     Message msg;
     QVector<QPair<QString, QStringList> >  topicTags;
-    QVector<QPair<QString, int>> topicSubscribers;
+    QVector<QPair<QString, int>> *topicSubscribers;
     QSqlQuery query;
 
 public:
-    ServerHandler(int socket, QVector<QPair<QString, QStringList> >  &topicTags);
+    ServerHandler(int socket, QVector<QPair<QString, QStringList> >  &topicTags, QVector<QPair<QString, int>> *topicSubscribers, QObject *parent = nullptr);
     void run() override;
 };
 

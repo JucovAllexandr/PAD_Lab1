@@ -1,6 +1,7 @@
 #include "serverhandler.h"
 
-ServerHandler::ServerHandler(int socket, QVector<QPair<QString, QStringList> > &topicTags): socket(socket), topicTags(topicTags)
+ServerHandler::ServerHandler(int socket, QVector<QPair<QString, QStringList> > &topicTags, QVector<QPair<QString, int> > *topicSubscribers, QObject *parent):
+    socket(socket), topicTags(topicTags),topicSubscribers(topicSubscribers), QThread (parent)
 {
     array.reserve(1024);
 }
@@ -37,7 +38,7 @@ void ServerHandler::run()
                     QString message = msg.message();
 
                     for(int i = 0; i < topicTags.size(); ++i){
-                        for(int j = 0; j < topicTags.size(); ++j){
+                        for(int j = 0; j < topicTags.at(i).second.size(); ++j){
                             if(message.contains(topicTags.at(i).second.at(j), Qt::CaseInsensitive)){
                                 qDebug()<<"insert into "<< topicTags.at(i);
                                 query.prepare("insert into Messages (TopicName, Message) values (:TopicName, :Message)");
@@ -45,13 +46,14 @@ void ServerHandler::run()
                                 query.bindValue(":Message", message);
 
                                 if(query.exec()){
-                                    for(int i = 0; i < topicSubscribers.size(); ++i){
+                                    qDebug() <<"subscribers: "<< topicSubscribers;
+                                    for(int t = 0; t < topicSubscribers->size(); ++t){
                                         QByteArray msg = message.toStdString().c_str();
                                         QByteArray buf = "send xml ";
                                         buf.push_back(QString::number(msg.size()).toStdString().c_str());
                                         buf.push_back(" \r\n");
                                         io.send(socket, buf.data(), buf.size());
-
+                                        qDebug() <<"send xml: "<< buf;
                                         QThread::msleep(100);
                                         io.send(socket, msg.data(), msg.size());
                                     }
@@ -103,20 +105,24 @@ void ServerHandler::run()
                 qDebug()<<"Client "<<socket<<" connect as publisher";
             }else if(str.contains("subscriber connect")){
                 QString topic = str.split(' ').at(2).trimmed();
+                qDebug()<<"topic" << topic;
                 bool isExist = false;
                 if(!topic.isEmpty()){
-                    query.prepare("select TopicName from Topics where TopicName = :topic");
-                    query.bindValue(":topic", topic);
 
-                    if(query.exec()){
+                    /*query.prepare("select TopicName from Topics where TopicName = '"+topic+"'");
+                    query.bindValue(":Topic", topic);*/
+
+                    if(query.exec("select TopicName from Topics where TopicName = '"+topic+"'")){
+                        qDebug()<<"topic" << query.executedQuery();
                         while (query.next()) {
+                            qDebug()<<"query " <<query.value(0).toString();
                             if(query.value(0).toString().contains(topic, Qt::CaseInsensitive)){
                                 isExist = true;
-                                topicSubscribers.push_back(QPair<QString, int> (topic, socket));
+                                topicSubscribers->push_back(QPair<QString, int> (topic, socket));
                             }
                         }
                     }else{
-                        qDebug()<<"Error inserting message" << query.lastError().text();
+                        qDebug()<<"Error selecting message" << query.lastError().text();
                     }
                 }
 

@@ -72,8 +72,8 @@ void Server::run()
         int sock = accept(tcpSocket, nullptr, nullptr);
         if(sock < 0) break;
         qDebug()<<"Client connected";
-        ServerHandler *sh = new ServerHandler(sock, topicTags);
-        sh->run();
+        ServerHandler *sh = new ServerHandler(sock, topicTags, &topicSubscribers, this);
+        sh->start();
     }
 }
 

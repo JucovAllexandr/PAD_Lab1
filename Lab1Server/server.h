@@ -30,7 +30,7 @@ class Server: public QThread
     int tcpSocket;
     sockaddr_in address;
     QVector<QPair<QString, QStringList> > topicTags;
-
+    QVector<QPair<QString, int>> topicSubscribers;
 public:
     Server();
     void bind(int port);
