@@ -1,8 +1,11 @@
 #include "subscriberhandler.h"
 #include <QDebug>
+#include "message.h"
+#include "client.h"
 
 SubscriberHandler::SubscriberHandler(int socket, QObject *parent): socket(socket), QThread(parent)
 {
+    this->parent = (Client*) parent;
     array.reserve(1024);
 }
 
@@ -23,6 +26,7 @@ void SubscriberHandler::run()
                 qDebug()<<"Error recive mesg, or client "<<socket<<" disconected";
                 isStop = true;
                 break;
+
             }else if(bytes_read == 0){
 
                 qDebug()<<"Client "<<socket<<" disconected";
@@ -37,12 +41,28 @@ void SubscriberHandler::run()
                 xmlRecvBytes -= bytes_read;
 
                 if(xmlRecvBytes <= 0){
+                    QDomDocument doc;
+                    doc.setContent(array);
+                    Message msg;
+                    msg.deserializeXML(doc);
+                    emit parent->messageRecived(msg);
                     receiveXml = false;
+
                 }
-            } else if(array.endsWith("\r\n")){
+            }else if(receiveAllXml){
+                xmlRecvBytes -= bytes_read;
+
+                if(xmlRecvBytes <= 0){
+                    QDomDocument doc;
+                    doc.setContent(array);
+                    MessageList msg;
+                    emit parent->messagesRecived(msg.deserializeXML(doc));
+                    receiveAllXml = false;
+
+                }
+            }else if(array.endsWith("\r\n")){
                 break;
             }
-
         }
 
         if(isStop){
@@ -54,6 +74,10 @@ void SubscriberHandler::run()
         if(str.contains("send xml", Qt::CaseInsensitive)){
             xmlRecvBytes = str.split(' ').at(2).toUInt();
             receiveXml = true;
+            qDebug() << "recv bytes" << xmlRecvBytes;
+        }else if(str.contains("send all xml", Qt::CaseInsensitive)){
+            xmlRecvBytes = str.split(' ').at(3).toUInt();
+            receiveAllXml = true;
             qDebug() << "recv bytes" << xmlRecvBytes;
         }
     }

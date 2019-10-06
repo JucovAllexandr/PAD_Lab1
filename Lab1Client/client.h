@@ -9,6 +9,7 @@
 #include "../Lab1Server/socketio.h"
 #include <unistd.h>
 #include <QDebug>
+#include <message.h>
 #include <QJsonObject>
 #include <QJsonDocument>
 #include "subscriberhandler.h"
@@ -31,6 +32,8 @@ public:
     void send(QString txt);
     ~Client();
 signals:
+    void messageRecived(Message msg);
+    void messagesRecived(QList<Message> msgs);
     void becameAPublisher();
     void becameASubscriber();
     void connected();

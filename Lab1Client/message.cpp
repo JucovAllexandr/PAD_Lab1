@@ -1,4 +1,8 @@
 #include "message.h"
+#include <QDebug>
+
+Message::Message(QString str): _message(str)
+{}
 
 void Message::setMessage(QString msg)
 {
@@ -20,5 +24,11 @@ void Message::deserializeJson(QByteArray json)
 {
     jobj = QJsonDocument::fromJson(json).object();
     _message = jobj["message"].toString();
+}
+
+void Message::deserializeXML(QDomDocument &doc)
+{
+    QDomNodeList nodeList = doc.elementsByTagName("Message");
+    _message = nodeList.at(0).toElement().text();
 }
 

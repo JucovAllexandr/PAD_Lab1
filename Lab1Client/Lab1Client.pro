@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -22,14 +22,16 @@ SOURCES += \
     subscriberhandler.cpp \
     widget.cpp \
     ../Lab1Server/socketio.cpp \
-    message.cpp
+    message.cpp \
+    messagelist.cpp
 
 HEADERS += \
     client.h \
     subscriberhandler.h \
     widget.h \
     ../Lab1Server/socketio.h \
-    message.h
+    message.h \
+    messagelist.h
 
 FORMS += \
     widget.ui

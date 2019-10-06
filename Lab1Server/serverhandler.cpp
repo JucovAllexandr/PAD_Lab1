@@ -134,6 +134,8 @@ void ServerHandler::run()
         }
         else if(clientType == None){
             QByteArray buf;
+            QString xml;
+
             if(str.contains("publisher connect\r\n")){
                 clientType = Publisher;
                 buf.push_back("+OK publisher\r\n");
@@ -159,12 +161,36 @@ void ServerHandler::run()
                     }else{
                         qDebug()<<"Error selecting message" << query.lastError().text();
                     }
+
+
+
                 }
 
                 if(isExist){
                     clientType = Subscriber;
                     buf.push_back("+OK subscriber\r\n");
                     qDebug()<<"Client "<<socket<<" connect as subscriber on "+topic;
+
+
+                    if(query.exec("select Message from Messages where TopicName = '"+topic+"'")){
+
+                        QDomDocument doc("XML");
+                        QDomElement root = doc.createElement("XML");
+                        doc.appendChild(root);
+
+                        while(query.next()){
+                            QDomElement tag = doc.createElement("Message");
+                            root.appendChild(tag);
+
+                            QDomText t = doc.createTextNode(query.value(0).toString());
+                            tag.appendChild(t);
+                        }
+
+                        xml = doc.toString();
+                    }else{
+                        qDebug()<<"Error selecting message" << query.lastError().text();
+                    }
+
                 }else{
                     buf.push_back("+NO\r\n");
                 }
@@ -173,6 +199,16 @@ void ServerHandler::run()
                 buf.push_back("+NO\r\n");
             }
             io.send(socket, buf.data(), buf.size());
+            QThread::msleep(50);
+
+            QByteArray sendXml = xml.toStdString().c_str();
+            QByteArray sendReq = "send all xml ";
+            sendReq.push_back(QString::number(sendXml.size()).toStdString().c_str());
+            sendReq.push_back(" \r\n");
+            io.send(socket, sendReq.data(), sendReq.size());
+
+            QThread::msleep(100);
+            io.send(socket, sendXml.data(), sendXml.size());
         }
 
         if(clientType != None){

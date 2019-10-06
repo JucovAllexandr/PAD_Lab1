@@ -12,6 +12,9 @@ Widget::Widget(QWidget *parent)
 
     client = new Client(this);
 
+    qRegisterMetaType<Message>("Message");
+    qRegisterMetaType<QList<Message>>("QList<Message>");
+
     connect(client, &Client::connected, this, [this]{
         ui->label_satus->setText("Status: connected");
         enableButtons();
@@ -30,6 +33,16 @@ Widget::Widget(QWidget *parent)
     connect(client, &Client::connectionError, this, [this]{
         ui->label_satus->setText("Status: connection error");
         disableAllUI();
+    });
+
+    connect(client, &Client::messageRecived, this, [this](Message msg){
+        ui->textBrowser_2->setHtml(ui->textBrowser_2->toHtml() + "<p>" + msg.message() + "</p>");
+    });
+
+    connect(client, &Client::messagesRecived, this, [this](QList<Message> msgs){
+        for(Message msg: msgs){
+            ui->textBrowser_2->setHtml(ui->textBrowser_2->toHtml() + "<p>" + msg.message() + "</p>");
+        }
     });
 }
 
