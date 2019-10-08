@@ -85,6 +85,7 @@ void ServerHandler::run()
                                         QByteArray buf = "send xml ";
                                         buf.push_back(QString::number(msg.size()).toStdString().c_str());
                                         buf.push_back(" \r\n");
+                                        qDebug()<<"send xml to socket"<<topicSubscribers->at(t).second;
                                         io.send(topicSubscribers->at(t).second, buf.data(), buf.size());
                                         QThread::msleep(100);
                                         io.send(topicSubscribers->at(t).second, msg.data(), msg.size());
@@ -161,8 +162,6 @@ void ServerHandler::run()
                     }else{
                         qDebug()<<"Error selecting message" << query.lastError().text();
                     }
-
-
 
                 }
 

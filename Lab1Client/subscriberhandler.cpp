@@ -35,7 +35,7 @@ void SubscriberHandler::run()
             }
 
             array.push_back(buf);
-
+            qDebug() << "push "<<array;
 
             if(receiveXml){
                 xmlRecvBytes -= bytes_read;
@@ -45,8 +45,10 @@ void SubscriberHandler::run()
                     doc.setContent(array);
                     Message msg;
                     msg.deserializeXML(doc);
-                    emit parent->messageRecived(msg);
+                    qDebug() << msg.message();
                     receiveXml = false;
+                    emit parent->messageRecived(msg);
+                    break;
 
                 }
             }else if(receiveAllXml){
@@ -56,8 +58,9 @@ void SubscriberHandler::run()
                     QDomDocument doc;
                     doc.setContent(array);
                     MessageList msg;
-                    emit parent->messagesRecived(msg.deserializeXML(doc));
                     receiveAllXml = false;
+                    emit parent->messagesRecived(msg.deserializeXML(doc));
+                    break;
 
                 }
             }else if(array.endsWith("\r\n")){
@@ -74,11 +77,11 @@ void SubscriberHandler::run()
         if(str.contains("send xml", Qt::CaseInsensitive)){
             xmlRecvBytes = str.split(' ').at(2).toUInt();
             receiveXml = true;
-            qDebug() << "recv bytes" << xmlRecvBytes;
+            qDebug() << "send xml recv bytes" << xmlRecvBytes;
         }else if(str.contains("send all xml", Qt::CaseInsensitive)){
             xmlRecvBytes = str.split(' ').at(3).toUInt();
             receiveAllXml = true;
-            qDebug() << "recv bytes" << xmlRecvBytes;
+            qDebug() << "send all xml recv bytes" << xmlRecvBytes;
         }
     }
 }
