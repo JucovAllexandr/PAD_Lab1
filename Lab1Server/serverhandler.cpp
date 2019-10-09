@@ -89,14 +89,16 @@ void ServerHandler::run()
                                     qDebug()<<xml;
 
                                     for(int t = 0; t < topicSubscribers->size(); ++t){
-                                        QByteArray msg = xml.toStdString().c_str();
-                                        QByteArray buf = "send xml ";
-                                        buf.push_back(QString::number(msg.size()).toStdString().c_str());
-                                        buf.push_back(" \r\n");
-                                        qDebug()<<"send xml to socket"<<topicSubscribers->at(t).second;
-                                        io.send(topicSubscribers->at(t).second, buf.data(), buf.size());
-                                        QThread::msleep(100);
-                                        io.send(topicSubscribers->at(t).second, msg.data(), msg.size());
+                                        if(topicSubscribers->at(t).first == topicTags.at(i).first){
+                                            QByteArray msg = xml.toStdString().c_str();
+                                            QByteArray buf = "send xml ";
+                                            buf.push_back(QString::number(msg.size()).toStdString().c_str());
+                                            buf.push_back(" \r\n");
+                                            qDebug()<<"send xml to socket"<<topicSubscribers->at(t).second;
+                                            io.send(topicSubscribers->at(t).second, buf.data(), buf.size());
+                                            QThread::msleep(100);
+                                            io.send(topicSubscribers->at(t).second, msg.data(), msg.size());
+                                        }
                                     }
 
                                     break;
