@@ -30,10 +30,11 @@ class ServerHandler: public QThread
     Message msg;
     QVector<QPair<QString, QStringList> >  topicTags;
     QVector<QPair<QString, int>> *topicSubscribers;
+    QVector<QPair<QStringList, QString> > *dictionary;
     QSqlQuery query;
 
 public:
-    ServerHandler(int socket, QVector<QPair<QString, QStringList> >  &topicTags, QVector<QPair<QString, int>> *topicSubscribers, QObject *parent = nullptr);
+    ServerHandler(int socket, QVector<QPair<QString, QStringList> >  &topicTags, QVector<QPair<QString, int>> *topicSubscribers, QVector<QPair<QStringList, QString> > *dictionary, QObject *parent = nullptr);
     void run() override;
 };
 

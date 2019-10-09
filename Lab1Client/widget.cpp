@@ -1,5 +1,6 @@
 #include "widget.h"
 #include "ui_widget.h"
+#include <QScrollBar>
 
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
@@ -37,12 +38,16 @@ Widget::Widget(QWidget *parent)
 
     connect(client, &Client::messageRecived, this, [this](Message msg){
         ui->textBrowser_2->setHtml(ui->textBrowser_2->toHtml() + "<p>" + msg.message() + "</p>");
+        QScrollBar *sb = ui->textBrowser_2->verticalScrollBar();
+        sb->setValue(sb->maximum());
     });
 
     connect(client, &Client::messagesRecived, this, [this](QList<Message> msgs){
         for(Message msg: msgs){
             ui->textBrowser_2->setHtml(ui->textBrowser_2->toHtml() + "<p>" + msg.message() + "</p>");
         }
+        QScrollBar *sb = ui->textBrowser_2->verticalScrollBar();
+        sb->setValue(sb->maximum());
     });
 }
 

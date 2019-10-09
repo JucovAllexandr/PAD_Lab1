@@ -46,6 +46,20 @@ Server::Server()
     }else{
         qDebug()<< "Error get topic tags" << query.lastError().text();
     }
+
+    if(query.exec("select * from Dictionary")){
+        while (query.next()) {
+            QStringList synonyms = query.value(1).toString().trimmed().split(',');
+
+            for(int i =0; i < synonyms.size(); ++i){
+                synonyms[i] = synonyms.at(i).trimmed();
+            }
+            dictionary.push_back(QPair<QStringList, QString>(synonyms, query.value(0).toString()));
+        }
+        qDebug()<<"Dictionary tags: "<<dictionary;
+    }else{
+        qDebug()<< "Error get dictionary" << query.lastError().text();
+    }
 }
 
 void Server::bind(int port)
@@ -72,7 +86,7 @@ void Server::run()
         int sock = accept(tcpSocket, nullptr, nullptr);
         if(sock < 0) break;
         qDebug()<<"Client connected";
-        ServerHandler *sh = new ServerHandler(sock, topicTags, &topicSubscribers, this);
+        ServerHandler *sh = new ServerHandler(sock, topicTags, &topicSubscribers, &dictionary,this);
         sh->start();
     }
 }

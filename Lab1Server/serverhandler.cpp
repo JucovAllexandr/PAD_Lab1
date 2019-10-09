@@ -1,7 +1,8 @@
 #include "serverhandler.h"
+#include <QRegularExpression>
 
-ServerHandler::ServerHandler(int socket, QVector<QPair<QString, QStringList> > &topicTags, QVector<QPair<QString, int> > *topicSubscribers, QObject *parent):
-    socket(socket), topicTags(topicTags),topicSubscribers(topicSubscribers), QThread (parent)
+ServerHandler::ServerHandler(int socket, QVector<QPair<QString, QStringList> > &topicTags, QVector<QPair<QString, int> > *topicSubscribers, QVector<QPair<QStringList, QString> > *dictionary, QObject *parent):
+    QThread (parent), socket(socket), topicTags(topicTags),topicSubscribers(topicSubscribers), dictionary(dictionary)
 {
     array.reserve(1024);
 }
@@ -42,9 +43,16 @@ void ServerHandler::run()
                     qDebug()<<"received json "<<array;
                     msg.deserializeJson(array);
 
-                    /*add correction words*/
                     QString message = msg.message();
                     bool isInserted = false;
+
+                    /*add correction words*/
+                    for(QPair<QStringList, QString> d: *dictionary){
+                        for(QString s: d.first){
+                            QRegularExpression regExp("\\b"+s+"\\b");
+                            message.replace(regExp, d.second);
+                        }
+                    }
 
                     for(int i = 0; i < topicTags.size(); ++i){
                         if(isInserted){

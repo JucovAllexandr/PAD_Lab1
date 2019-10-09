@@ -21,6 +21,9 @@ const QString CREATE_TABLES_SQL = (QString)"BEGIN TRANSACTION;"+
     "	`Message`	TEXT NOT NULL, "+
     "	PRIMARY KEY(`Id`) "+
     " );"+
+    "CREATE TABLE IF NOT EXISTS `Dictionary` ( "+
+    "`Word` TEXT NOT NULL UNIQUE, "+
+    "`Synonyms` TEXT NOT NULL ); "+
     "COMMIT";
 
 class Server: public QThread
@@ -31,6 +34,8 @@ class Server: public QThread
     sockaddr_in address;
     QVector<QPair<QString, QStringList> > topicTags;
     QVector<QPair<QString, int>> topicSubscribers;
+    QVector<QPair<QStringList, QString> > dictionary;
+
 public:
     Server();
     void bind(int port);
